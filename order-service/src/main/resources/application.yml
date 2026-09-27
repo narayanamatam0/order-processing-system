@@ -4,6 +4,9 @@ server:
 spring:
   application:
     name: order-service
+  jackson:
+    deserialization:
+      accept-float-as-int: false
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     producer:
