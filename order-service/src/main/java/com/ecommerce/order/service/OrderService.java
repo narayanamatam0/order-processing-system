@@ -16,6 +16,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class OrderService {
+
+    private final OrderIdGenerator orderIdGenerator;
+    public OrderService(OrderIdGenerator orderIdGenerator) {
+        this.orderIdGenerator = orderIdGenerator;
+        System.out.println("OrderService constructor executed");
+    }
     // Learning step 1: process-local storage. Restarting the service clears orders.
     private final Map<UUID, OrderResponse> orders = new ConcurrentHashMap<>();
 
@@ -28,7 +34,7 @@ public class OrderService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         OrderResponse order = new OrderResponse(
-                UUID.randomUUID(), request.customerId(), items, totalAmount,
+                orderIdGenerator.generate(), request.customerId(), items, totalAmount,
                 request.currency(), OrderStatus.PENDING, Instant.now());
         orders.put(order.orderId(), order);
         return order;

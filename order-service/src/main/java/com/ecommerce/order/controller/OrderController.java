@@ -22,8 +22,8 @@ public class OrderController {
 
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
+        System.out.println("OrderController constructor executed");
     }
-
     @PostMapping
     public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody CreateOrderRequest request) {
         OrderResponse order = orderService.createOrder(request);
