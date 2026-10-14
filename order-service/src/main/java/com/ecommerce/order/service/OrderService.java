@@ -2,6 +2,7 @@ package com.ecommerce.order.service;
 
 import com.ecommerce.common.event.OrderItem;
 import com.ecommerce.order.dto.CreateOrderRequest;
+import com.ecommerce.order.dto.OrderItemResponse;
 import com.ecommerce.order.dto.OrderResponse;
 import com.ecommerce.order.exception.OrderNotFoundException;
 import com.ecommerce.order.model.OrderStatus;
@@ -26,8 +27,13 @@ public class OrderService {
     private final Map<UUID, OrderResponse> orders = new ConcurrentHashMap<>();
 
     public OrderResponse createOrder(CreateOrderRequest request) {
-        List<OrderItem> items = request.items().stream()
-                .map(item -> new OrderItem(item.productId(), item.quantity(), item.unitPrice()))
+        List<OrderItemResponse> items = request.items().stream()
+                .map(item -> new OrderItemResponse(
+                        item.productId(),
+                        item.productName(),
+                        item.quantity(),
+                        item.unitPrice()
+                ))
                 .toList();
         BigDecimal totalAmount = items.stream()
                 .map(item -> item.unitPrice().multiply(BigDecimal.valueOf(item.quantity())))
